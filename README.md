@@ -9,10 +9,10 @@ collections.
 The repository also includes the short written reports submitted with the
 solution:
 
-- `swe_agent_trajectory_analysis_report.pdf` — one-page report for Task #2,
+- `swe_agent_trajectory_analysis_report.pdf` - one-page report for Task #2,
   summarizing observations from raw message counts and from an additional
   resolved/unresolved analysis.
-- `Towards_AI_Agent_Reliability_Summary.docx` — short summary of the paper
+- `Towards_AI_Agent_Reliability_Summary.docx` - short summary of the paper
   *Towards a Science of AI Agent Reliability*.
 
 ## What the Required Tool Does
@@ -72,7 +72,6 @@ The Docent API key should be placed in a local `.env` file:
 
 ```text
 DOCENT_API_KEY=your_api_key_here
-DOCENT_COLLECTION_ID=optional_default_collection_id
 ```
 
 The `.env` file is local configuration and should not be committed with real
@@ -81,7 +80,8 @@ credentials.
 ## Count Messages for One Collection
 
 `trajectory_metrics.py` lists all runs in a Docent collection, fetches each
-agent trajectory, and counts messages by role.
+agent trajectory, and counts messages by role. The collection ID is required and
+must be passed explicitly on the command line.
 
 ```bash
 uv run trajectory_metrics.py --collection-id <collection_id> --all
@@ -205,7 +205,7 @@ runs. The main aggregate results are:
 | Claude 4.5 Opus (high reasoning) | 500 | 72.41 | 14 | 222 | 76.8% |
 | Gemini 3 Flash (high reasoning) | 500 | 113.24 | 2 | 319 | 75.8% |
 | MiniMax M2.5 (high reasoning) | 500 | 121.89 | 23 | 502 | 75.8% |
-| Claude Opus 4.6 | 500 | 60.84 | 11 | 288 | 74.0% |
+| Claude Opus 4.6 | 500 | 60.84 | 11 | 288 | 75.6% |
 | GPT-5.2 Codex | 500 | 72.88 | 17 | 251 | 72.8% |
 
 ## Reports Included in This Repository
