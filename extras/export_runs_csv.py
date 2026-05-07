@@ -122,7 +122,7 @@ def main() -> None:
         writer.writeheader()
         writer.writerows(all_runs)
 
-    print(f"✅ Saved to: {output_path.resolve()}")
+    print(f"Saved to: {output_path.resolve()}")
     print(f"   {len(all_runs)} rows (runs)")
     print(f"\nColumns: {', '.join(fieldnames)}")
     print(f"Resolved encoding: 1=passed, 0=failed, -1=unknown")
