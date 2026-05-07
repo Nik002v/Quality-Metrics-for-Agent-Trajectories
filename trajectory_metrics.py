@@ -18,6 +18,7 @@ Usage
 """
 
 import argparse
+import json
 import os
 import sys
 from dataclasses import dataclass
@@ -33,7 +34,9 @@ try:
         SystemMessage, UserMessage, AssistantMessage, ToolMessage,
     )
 except ImportError:
-    sys.exit("ERROR: docent-python is not installed.\n       Run: uv run trajectory_metrics.py")
+    Docent = None
+    AgentRun = object
+    SystemMessage = UserMessage = AssistantMessage = ToolMessage = ()
 
 
 # ---------------------------------------------------------------------------
@@ -67,6 +70,31 @@ def count_messages(agent_run: AgentRun) -> MessageCounts:
                 counts.assistant += 1
             elif isinstance(msg, ToolMessage):
                 counts.tool += 1
+    return counts
+
+
+def count_messages_json(path: str) -> MessageCounts:
+    """Count messages by role in a local trajectory JSON file."""
+    with open(path, encoding="utf-8") as f:
+        data = json.load(f)
+    if isinstance(data, dict) and "transcripts" in data:
+        messages = [m for t in data["transcripts"] for m in t.get("messages", [])]
+    elif isinstance(data, dict):
+        messages = data.get("messages") or data.get("trajectory") or []
+    else:
+        messages = data
+
+    counts = MessageCounts()
+    for msg in messages:
+        role = str(msg.get("role", "")).lower()
+        if role == "system":
+            counts.system += 1
+        elif role == "user":
+            counts.user += 1
+        elif role == "assistant":
+            counts.assistant += 1
+        elif role == "tool":
+            counts.tool += 1
     return counts
 
 
@@ -160,8 +188,11 @@ def build_parser() -> argparse.ArgumentParser:
         epilog=__doc__,
     )
     parser.add_argument(
+        "--input",
+        help="Local trajectory JSON file to process.",
+    )
+    parser.add_argument(
         "--collection-id",
-        required=True,
         help="Docent collection ID to process.",
     )
     parser.add_argument("--all", action="store_true", help="All runs in collection.")
@@ -175,6 +206,13 @@ def main() -> None:
     parser = build_parser()
     args = parser.parse_args()
 
+    if args.input:
+        print_counts(count_messages_json(args.input), label=args.input)
+        return
+    if not args.collection_id:
+        sys.exit("ERROR: Provide --input trajectory.json or --collection-id <collection_id>.")
+    if Docent is None:
+        sys.exit("ERROR: docent-python is not installed.\n       Run: uv run trajectory_metrics.py")
     if not args.api_key:
         sys.exit("ERROR: No API key found. Add DOCENT_API_KEY to .env")
     if not args.all:
