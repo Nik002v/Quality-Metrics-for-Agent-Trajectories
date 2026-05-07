@@ -8,6 +8,7 @@ trajectory_metrics.py  —  CLI tool for metrics from a single collection
 
 Usage
 -----
+    uv run trajectory_metrics.py --input path/to/trajectory.json
     uv run trajectory_metrics.py --collection-id <collection_id> --all
     uv run trajectory_metrics.py --collection-id <collection_id> --all --aggregate
     uv run trajectory_metrics.py --collection-id <collection_id> --all --limit 5
