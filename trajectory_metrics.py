@@ -8,9 +8,9 @@ trajectory_metrics.py  —  CLI tool for metrics from a single collection
 
 Usage
 -----
-    uv run trajectory_metrics.py --all
-    uv run trajectory_metrics.py --all --aggregate
-    uv run trajectory_metrics.py --all --limit 5
+    uv run trajectory_metrics.py --collection-id <collection_id> --all
+    uv run trajectory_metrics.py --collection-id <collection_id> --all --aggregate
+    uv run trajectory_metrics.py --collection-id <collection_id> --all --limit 5
 
 .env
 ----
@@ -159,7 +159,11 @@ def build_parser() -> argparse.ArgumentParser:
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=__doc__,
     )
-    parser.add_argument("--collection-id", default=os.getenv("DOCENT_COLLECTION_ID"))
+    parser.add_argument(
+        "--collection-id",
+        required=True,
+        help="Docent collection ID to process.",
+    )
     parser.add_argument("--all", action="store_true", help="All runs in collection.")
     parser.add_argument("--aggregate", action="store_true", help="Print aggregate at end.")
     parser.add_argument("--api-key", default=os.getenv("DOCENT_API_KEY"))
@@ -173,8 +177,6 @@ def main() -> None:
 
     if not args.api_key:
         sys.exit("ERROR: No API key found. Add DOCENT_API_KEY to .env")
-    if not args.collection_id:
-        sys.exit("ERROR: No collection ID found. Add DOCENT_COLLECTION_ID to .env or use --collection-id")
     if not args.all:
         sys.exit("ERROR: Use --all flag to process all runs.")
 
