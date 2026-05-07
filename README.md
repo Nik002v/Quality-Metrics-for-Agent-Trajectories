@@ -79,6 +79,12 @@ credentials.
 
 ## Count Messages for One Collection
 
+For a local trajectory JSON file:
+
+```bash
+uv run trajectory_metrics.py --input path/to/trajectory.json
+```
+
 `trajectory_metrics.py` lists all runs in a Docent collection, fetches each
 agent trajectory, and counts messages by role. The collection ID is required and
 must be passed explicitly on the command line.
