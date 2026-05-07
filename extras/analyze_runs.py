@@ -35,7 +35,7 @@ def load_data(csv_path: str) -> pd.DataFrame:
         sys.exit(f"ERROR: '{csv_path}' not found.")
     
     df = pd.read_csv(path)
-    print(f"✅ Loaded: {csv_path}")
+    print(f"Loaded: {csv_path}")
     print(f"   Rows: {len(df)}")
     print(f"   Columns: {', '.join(df.columns)}")
     return df
@@ -93,7 +93,7 @@ def create_boxplot_per_model(df: pd.DataFrame, output_dir: Path) -> None:
         safe_model_name = model.replace(" ", "_").replace("(", "").replace(")", "")
         filepath = output_dir / f"boxplot_{safe_model_name}.png"
         plt.savefig(filepath, dpi=300, bbox_inches="tight")
-        print(f"✅ Saved: {filepath}")
+        print(f"Saved: {filepath}")
         plt.close()
 
 
@@ -126,7 +126,7 @@ def create_histogram_per_model(df: pd.DataFrame, output_dir: Path) -> None:
         safe_model_name = model.replace(" ", "_").replace("(", "").replace(")", "")
         filepath = output_dir / f"histogram_{safe_model_name}.png"
         plt.savefig(filepath, dpi=300, bbox_inches="tight")
-        print(f"✅ Saved: {filepath}")
+        print(f"Saved: {filepath}")
         plt.close()
 
 
@@ -162,7 +162,7 @@ def create_grouped_histogram_per_model(df: pd.DataFrame, output_dir: Path) -> No
         safe_model_name = model.replace(" ", "_").replace("(", "").replace(")", "")
         filepath = output_dir / f"grouped_hist_total_{safe_model_name}.png"
         plt.savefig(filepath, dpi=300, bbox_inches="tight")
-        print(f"✅ Saved: {filepath}")
+        print(f"Saved: {filepath}")
         plt.close()
 
 
@@ -212,7 +212,7 @@ def create_resolved_barchart(df: pd.DataFrame, output_dir: Path) -> None:
     
     filepath = output_dir / "resolved_status_barchart.png"
     plt.savefig(filepath, dpi=300, bbox_inches="tight")
-    print(f"✅ Saved: {filepath}")
+    print(f"Saved: {filepath}")
     plt.close()
 
 
@@ -246,7 +246,7 @@ def create_resolve_rate_chart(df: pd.DataFrame, output_dir: Path) -> None:
     
     filepath = output_dir / "resolve_rate_chart.png"
     plt.savefig(filepath, dpi=300, bbox_inches="tight")
-    print(f"✅ Saved: {filepath}")
+    print(f"Saved: {filepath}")
     plt.close()
 
 
@@ -263,7 +263,7 @@ def print_summary_stats(df: pd.DataFrame) -> None:
         model_data = df[df["model"] == model]
         resolve_rate = len(model_data[model_data["resolved"] == 1]) / len(model_data) * 100
         
-        print(f"\n📊 {model}")
+        print(f"\n{model}")
         print(f"   Runs: {len(model_data)}")
         print(f"   Resolve rate: {resolve_rate:.1f}%")
         print(f"\n   {'Column':<15} {'Mean':>8} {'Median':>8} {'Min':>6} {'Max':>6} {'Std':>8}")
@@ -298,31 +298,31 @@ def main() -> None:
     histogram_dir.mkdir(parents=True, exist_ok=True)
     grouped_dir.mkdir(parents=True, exist_ok=True)
     
-    print(f"\n📂 Output directories:")
+    print(f"\nOutput directories:")
     print(f"   Boxplots:  {boxplot_dir.resolve()}")
     print(f"   Histograms: {histogram_dir.resolve()}")
     print(f"   Grouped:    {grouped_dir.resolve()}")
     
     df = load_data(args.input)
     
-    print("\n📈 Creating boxplots by model...")
+    print("\nCreating boxplots by model...")
     create_boxplot_per_model(df, boxplot_dir)
 
-    print("\n📈 Creating standard histograms by model...")
+    print("\nCreating standard histograms by model...")
     create_histogram_per_model(df, histogram_dir)
 
-    print("\n📈 Creating grouped 'total' histograms by resolved status per model...")
+    print("\nCreating grouped 'total' histograms by resolved status per model...")
     create_grouped_histogram_per_model(df, grouped_dir)
     
-    print("\n📊 Creating barchart for resolved status...")
+    print("\nCreating barchart for resolved status...")
     create_resolved_barchart(df, grouped_dir)
     
-    print("\n📈 Creating resolve rate chart...")
+    print("\nCreating resolve rate chart...")
     create_resolve_rate_chart(df, grouped_dir)
     
     print_summary_stats(df)
     
-    print(f"\n✅ All charts created in '{CHARTS_BASE}' subdirectories!")
+    print(f"\nAll charts created in '{CHARTS_BASE}' subdirectories!")
 
 
 if __name__ == "__main__":
